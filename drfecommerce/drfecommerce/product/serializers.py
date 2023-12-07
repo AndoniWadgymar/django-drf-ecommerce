@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from product.models import Product, Category, Brand
+from drfecommerce.product.models import Product, Category, Brand
 
 class CategorySerializer(serializers.ModelSerializer):
   class Meta:
