@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from drfecommerce.product.models import Product, Category, Brand
+from drfecommerce.product.models import Product, Category, Brand, ProductLine
 
 class CategorySerializer(serializers.ModelSerializer):
   class Meta:
@@ -19,3 +19,10 @@ class ProductSerializer(serializers.ModelSerializer):
   class Meta:
     model = Product
     fields = "__all__"
+
+class ProductLineSerializer(serializers.ModelSerializer):
+  product = ProductSerializer()
+
+  class Meta:
+    model = ProductLine
+    field = "__all__"
