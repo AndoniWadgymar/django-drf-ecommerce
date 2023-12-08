@@ -1,7 +1,7 @@
-#File to create resusable fields that many components in models can use
-from django.db import models
 from django.core import checks
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import models
+
 
 class OrderField(models.PositiveIntegerField):
 
@@ -33,16 +33,20 @@ class OrderField(models.PositiveIntegerField):
         return []
 
     def pre_save(self, model_instance, add):
-        if getattr(model_instance, self.attname) is None:
-            queryset = self.model.objects.all()
-            try:
-                query = {self.unique_for_field : getattr(model_instance, self.unique_for_field)}
-                queryset = queryset.filter(**query)
-                last_item = queryset.latest(self.attname)
-                value = last_item.order + 1
 
+        if getattr(model_instance, self.attname) is None:
+            qs = self.model.objects.all()
+            try:
+                query = {
+                    self.unique_for_field: getattr(
+                        model_instance, self.unique_for_field
+                    )
+                }
+                qs = qs.filter(**query)
+                last_item = qs.latest(self.attname)
+                value = last_item.order + 1
             except ObjectDoesNotExist:
                 value = 1
             return value
-
-        return super().pre_save(model_instance, add)
+        else:
+            return super().pre_save(model_instance, add)
