@@ -44,3 +44,4 @@ class ProductImageFactory(factory.django.DjangoModelFactory):
   url = "test.jpg"
   productline = factory.SubFactory(ProductLineFactory)
 
+
