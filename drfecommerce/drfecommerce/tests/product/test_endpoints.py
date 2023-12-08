@@ -59,3 +59,4 @@ class TestProductEndpoints:
     response = api_client().get(f"{self.endpoint}category/{obj.slug}/")
     assert response.status_code == 200
     assert len(json.loads(response.content)) == 1
+    "Test"
