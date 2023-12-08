@@ -1,3 +1,10 @@
+from django.db import connection
+
+from pygments import highlight
+from pygments.formatters import TerminalFormatter
+from pygments.lexers import SqlLexer
+from sqlparse import format
+
 from drf_spectacular.utils import extend_schema
 
 from rest_framework import viewsets
@@ -34,12 +41,20 @@ class ProductViewSet(viewsets.ViewSet):
   """
   Simple ViewSet for viewing all products
   """
-  queryset = Product.objects.all()
+  # queryset = Product.objects.all()
+  # With our custom manager
+  queryset = Product.objects.all().isactive()
   lookup_field = "slug"
 
   def retrieve(self, request, slug=None):
-    serializer = ProductSerializer(self.queryset.filter(slug=slug), many=True)
-    return Response(serializer.data)
+    serializer = ProductSerializer(self.queryset.filter(slug=slug).select_related("category"), many=True)
+    data = Response(serializer.data)
+
+    q = list(connection.queries)
+    print(len(q))
+    print(q)
+
+    return data
 
   @extend_schema(responses=ProductSerializer)
   def list(self, request):
