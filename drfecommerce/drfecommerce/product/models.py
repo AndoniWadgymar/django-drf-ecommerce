@@ -52,10 +52,16 @@ class Attribute(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField(blank=True)
 
+    def __str__(self):
+        return self.name
+
 
 class AttributeValue(models.Model):
-    att_value = models.CharField(max_length=100)
+    attribute_value = models.CharField(max_length=100)
     attribute = models.ForeignKey(Attribute, on_delete=models.CASCADE, related_name="attribute_value")
+
+    def __str__(self):
+        return f"{self.attribute.name}-{self.attribute_value}"
 
 
 class ProductLine(models.Model):
@@ -67,7 +73,7 @@ class ProductLine(models.Model):
     )
     is_active = models.BooleanField(default=False)
     order = OrderField(unique_for_field="product", blank=True)
-    attribute_Value = models.ManyToManyField(AttributeValue, through="ProductLineAttributeValue")
+    attribute_Value = models.ManyToManyField(AttributeValue, through="ProductLineAttributeValue", related_name="product_line_attribute_value")
     objects = ActiveQueryset.as_manager()
 
     def clean(self):
