@@ -73,7 +73,7 @@ class ProductLine(models.Model):
     )
     is_active = models.BooleanField(default=False)
     order = OrderField(unique_for_field="product", blank=True)
-    attribute_Value = models.ManyToManyField(AttributeValue, through="ProductLineAttributeValue", related_name="product_line_attribute_value")
+    attribute_value = models.ManyToManyField(AttributeValue, through="ProductLineAttributeValue", related_name="product_line_attribute_value")
     objects = ActiveQueryset.as_manager()
 
     def clean(self):
